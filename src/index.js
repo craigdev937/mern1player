@@ -8,14 +8,15 @@ import { ERR } from "./middleware/midError.js";
 import { playRt } from "./routes/playRt.js";
 
 (async () => {
-    await mongoose.connect(process.env.MONGO_URI, {
-        useNewUrlParser: true, useUnifiedTopology: true
-    })
+    await mongoose.connect(process.env.MONGO_URI)
         .then(() => console.log("MongoDB is now Connected!"))
         .catch((error) => console.log(error));
 
     const app = express();
     app.use(helmet());
+    app.get("/favico.ico", (req, res) => {
+        res.sendStatus(404);
+    });
 
     // CORS
     app.use((req, res, next) => {
