@@ -66,10 +66,12 @@ class PlayerClass {
 
     Delete = async (req, res, next) => {
         try {
-            const player = await PlayerModel.findById(req.params.id);
-            await cloudinary.uploader.destroy(player.cloudinary_id);
-            await player.remove();
-            res.status(201).json(`The Player was removed`);
+            const oldIMG = await PlayerModel
+                .findByIdAndDelete(req.params.id);
+            await cloudinary.uploader
+                .destroy(oldIMG.cloudinary_id);
+            return res.status(201)
+                .json(`The Player was removed`);
         } catch (error) {
             res.status(500).json(error);
             next(error);
